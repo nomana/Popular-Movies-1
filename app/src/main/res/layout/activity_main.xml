@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,18 +25,27 @@
         android:layout_width="wrap_content"/>
 
     <TextView
-        android:id="@+id/url_results"
-        android:text="Results here"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
-
-    <TextView
         android:id="@+id/first"
         android:text="Top result!"
         android:paddingTop="20dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"/>
 
+    <TextView
+        android:id="@+id/url_results"
+        android:text="Results here"
+        android:paddingTop="20dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_movies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"/>
+
 </LinearLayout>
 
 </ScrollView>
+

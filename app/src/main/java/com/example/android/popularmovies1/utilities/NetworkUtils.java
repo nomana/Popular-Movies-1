@@ -57,6 +57,22 @@ public class NetworkUtils {
         return url;
     }
 
+    //Build URL for poster image
+    public static URL buildImageUrl(String imagePath) {
+        Uri builtUri = Uri.parse("https://image.tmdb.org/t/p/w180").buildUpon()
+                .appendPath(imagePath)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
     //Search internet using the URL
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

@@ -1,8 +1,13 @@
 package com.example.android.popularmovies1;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -15,11 +20,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
     private TextView mSearchTextView;
 
@@ -30,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTopResult;
 
     private String jsonFromUrl;
+
+    private MovieAdapter mMovieAdapter;
+    private RecyclerView mRecyclerView;
 
     final static String API_KEY = "ca1eda3d7d2727738ebbeffcde814ed8";
 
@@ -43,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
         mUrlResultsTextView = (TextView) findViewById(R.id.url_results);
         mTopResult = (TextView) findViewById(R.id.first);
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        mMovieAdapter = new MovieAdapter(this, this);
+
+        mRecyclerView.setAdapter(mMovieAdapter);
     }
 
     private void makeUrlQuery() {
@@ -57,6 +74,16 @@ public class MainActivity extends AppCompatActivity {
     private void closeOnError() {
         finish();
         Toast.makeText(this, R.string.main_error_message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(long orderNumber) {
+        /*
+        Intent movieDetailIntent = new Intent(MainActivity.this, DetailActivity.class);
+        Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(date);
+        weatherDetailIntent.setData(uriForDateClicked);
+        startActivity(weatherDetailIntent);
+        */
     }
 
     public class UrlQueryTask extends AsyncTask<URL, Void, String> {
@@ -83,10 +110,61 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject json = new JSONObject(jsonFromUrl);
                     JSONArray results = json.getJSONArray("results");
-                    List<String> first = new ArrayList<>();
-                    first.add(results.getString(0));
-                    String firstString = android.text.TextUtils.join(", ", first);
-                    mTopResult.setText(firstString);
+
+                    List<String> voteCountsList = new ArrayList<>();
+                    List<String> idList = new ArrayList<>();
+                    List<String> videoList = new ArrayList<>();
+                    List<String> voteAverageList = new ArrayList<>();
+                    List<String> titleList = new ArrayList<>();
+                    List<String> popularityList = new ArrayList<>();
+                    List<String> posterPathList = new ArrayList<>();
+                    List<String> originalLanguageList = new ArrayList<>();
+                    List<String> originalTitleList = new ArrayList<>();
+                    List<String> genreIdsList = new ArrayList<>();
+                    List<String> backdropPathList = new ArrayList<>();
+                    List<String> adultList = new ArrayList<>();
+                    List<String> overviewList = new ArrayList<>();
+                    List<String> releaseDateList = new ArrayList<>();
+
+                    int resultsLengh = results.length();
+
+                    for(int i = 0; i<resultsLengh; i++) {
+                        JSONObject focus = results.getJSONObject(i);
+
+                        voteCountsList.add(focus.getString("vote_count"));
+                        idList.add(focus.getString("id"));
+                        videoList.add(focus.getString("video"));
+                        voteAverageList.add(focus.getString("vote_average"));
+                        titleList.add(focus.getString("title"));
+                        popularityList.add(focus.getString("popularity"));
+                        posterPathList.add(focus.getString("poster_path"));
+                        originalLanguageList.add(focus.getString("original_language"));
+                        originalTitleList.add(focus.getString("original_title"));
+                        genreIdsList.add(focus.getString("genre_ids"));
+                        backdropPathList.add(focus.getString("backdrop_path"));
+                        adultList.add(focus.getString("adult"));
+                        overviewList.add(focus.getString("overview"));
+                        releaseDateList.add(focus.getString("release_date"));
+                    }
+                    //first.add(results.getString(0));
+                    String voteCounts = android.text.TextUtils.join(", ", voteCountsList);
+                    String id = android.text.TextUtils.join(", ", idList);
+                    String video = android.text.TextUtils.join(", ", videoList);
+                    String voteAverage = android.text.TextUtils.join(", ", voteAverageList);
+                    String title = android.text.TextUtils.join(", ", titleList);
+                    String popularity = android.text.TextUtils.join(", ", popularityList);
+                    String posterPath = android.text.TextUtils.join(", ", posterPathList);
+                    String originalLanguage = android.text.TextUtils.join(", ", originalLanguageList);
+                    String originalTitle = android.text.TextUtils.join(", ", originalTitleList);
+                    String genreIds = android.text.TextUtils.join(", ", genreIdsList);
+                    String backdropPath = android.text.TextUtils.join(", ", backdropPathList);
+                    String adult = android.text.TextUtils.join(", ", adultList);
+                    String overview = android.text.TextUtils.join(", ", overviewList);
+                    String releaseDate = android.text.TextUtils.join(", ", releaseDateList);
+
+                    String text = voteCounts;
+                    mTopResult.setText(voteCounts+"\n\n"+id+"\n\n"+video+"\n\n"+voteAverage+"\n\n"+title+"\n\n"+popularity+"\n\n"+posterPath+"\n\n"+originalLanguage+"\n\n"+originalTitle+"\n\n"+genreIds+"\n\n"+backdropPath+"\n\n"+adult+"\n\n"+overview+"\n\n"+releaseDate);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -95,12 +173,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Create menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    //When menu clicked
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
@@ -119,4 +199,23 @@ public class MainActivity extends AppCompatActivity {
 
     //Example API Request
     //https://api.themoviedb.org/3/movie/550?api_key=ca1eda3d7d2727738ebbeffcde814ed8
+
+    /*public static int getSmallArtResourceIdForWeatherCondition(int weatherId) {
+
+        Uri builtUri = Uri.parse(MOVIE_DB_URL).buildUpon()
+                .appendPath(POPULAR_PATH)
+                .appendQueryParameter(PARAM_API_KEY, apiKey)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return NetworkUtils.;
+    }*/
+
+
 }

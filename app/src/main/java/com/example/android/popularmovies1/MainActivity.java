@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private MovieAdapter mMovieAdapter;
     private RecyclerView mRecyclerView;
 
+    final static int SORT_POPULARITY_KEY = 1;
+    final static int SORT_RATING_KEY = 2;
+
     final static String API_KEY = "ca1eda3d7d2727738ebbeffcde814ed8";
 
     @Override
@@ -57,17 +61,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mMovieAdapter = new MovieAdapter(this, this);
+        mMovieAdapter = new MovieAdapter();
 
         mRecyclerView.setAdapter(mMovieAdapter);
+
+        makeUrlQuery(SORT_POPULARITY_KEY);
     }
 
-    private void makeUrlQuery() {
+    private void makeUrlQuery(int sortKey) {
         URL popularUrl = NetworkUtils.buildPopularUrl(API_KEY);
         URL topRatedUrl = NetworkUtils.buildTopRatedUrl(API_KEY);
-        mUrlDisplayTextView.setText(popularUrl.toString());
-
-        new UrlQueryTask().execute(popularUrl);
+        if(sortKey == 1) {
+            mUrlDisplayTextView.setText(popularUrl.toString());
+            new UrlQueryTask().execute(popularUrl);
+        }
+        else if(sortKey == 2) {
+            mUrlDisplayTextView.setText(topRatedUrl.toString());
+            new UrlQueryTask().execute(topRatedUrl);
+        }
 
     }
 
@@ -105,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         @Override
         protected void onPostExecute(String s) {
             if (s != null && !s.equals("")) {
-                mUrlResultsTextView.setText(s);
+                //mUrlResultsTextView.setText(s);
                 jsonFromUrl = s;
                 try {
                     JSONObject json = new JSONObject(jsonFromUrl);
@@ -163,7 +174,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     String releaseDate = android.text.TextUtils.join(", ", releaseDateList);
 
                     String text = voteCounts;
-                    mTopResult.setText(voteCounts+"\n\n"+id+"\n\n"+video+"\n\n"+voteAverage+"\n\n"+title+"\n\n"+popularity+"\n\n"+posterPath+"\n\n"+originalLanguage+"\n\n"+originalTitle+"\n\n"+genreIds+"\n\n"+backdropPath+"\n\n"+adult+"\n\n"+overview+"\n\n"+releaseDate);
+                    mTopResult.setText(title+"\n\n"+voteAverage+"\n\n"+popularity);
+
+                    //mTopResult.setText(voteCounts+"\n\n"+id+"\n\n"+video+"\n\n"+voteAverage+"\n\n"+title+"\n\n"+popularity+"\n\n"+posterPath+"\n\n"+originalLanguage+"\n\n"+originalTitle+"\n\n"+genreIds+"\n\n"+backdropPath+"\n\n"+adult+"\n\n"+overview+"\n\n"+releaseDate);
+
+                    mMovieAdapter.setData(posterPathList, voteAverageList, popularityList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -184,10 +199,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
-        if (itemThatWasClickedId == R.id.action_sort) {
-            makeUrlQuery();
+        if (itemThatWasClickedId == R.id.action_sort_popularity) {
+            makeUrlQuery(SORT_POPULARITY_KEY);
             return true;
         }
+        else if (itemThatWasClickedId == R.id.action_sort_rating) {
+            makeUrlQuery(SORT_RATING_KEY);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

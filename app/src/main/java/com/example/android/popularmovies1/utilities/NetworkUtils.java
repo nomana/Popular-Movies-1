@@ -1,5 +1,7 @@
 package com.example.android.popularmovies1.utilities;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -59,7 +61,8 @@ public class NetworkUtils {
 
     //Build URL for poster image
     public static URL buildImageUrl(String imagePath) {
-        Uri builtUri = Uri.parse("https://image.tmdb.org/t/p/w180").buildUpon()
+        imagePath = imagePath.replace("/", "");
+        Uri builtUri = Uri.parse("https://image.tmdb.org/t/p/w780").buildUpon()
                 .appendPath(imagePath)
                 .build();
 
@@ -90,6 +93,23 @@ public class NetworkUtils {
             }
         } finally {
             urlConnection.disconnect();
+        }
+    }
+
+    public static Bitmap bitmapFromUrl(String imageUrl) {
+        try {
+            URL url = new URL(imageUrl);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+            InputStream inputStream = urlConnection.getInputStream();
+            Bitmap bitmapImage = BitmapFactory.decodeStream(inputStream);
+            return bitmapImage;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+
         }
     }
 }

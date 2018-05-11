@@ -51,10 +51,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSearchTextView = (TextView) findViewById(R.id.search_action);
-        mUrlDisplayTextView = (TextView) findViewById(R.id.url_display);
-        mUrlResultsTextView = (TextView) findViewById(R.id.url_results);
-        mTopResult = (TextView) findViewById(R.id.first);
+        //mSearchTextView = (TextView) findViewById(R.id.search_action);
+        //mUrlDisplayTextView = (TextView) findViewById(R.id.url_display);
+        //mUrlResultsTextView = (TextView) findViewById(R.id.url_results);
+        //mTopResult = (TextView) findViewById(R.id.first);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
 
@@ -72,11 +72,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         URL popularUrl = NetworkUtils.buildPopularUrl(API_KEY);
         URL topRatedUrl = NetworkUtils.buildTopRatedUrl(API_KEY);
         if(sortKey == 1) {
-            mUrlDisplayTextView.setText(popularUrl.toString());
+            //mUrlDisplayTextView.setText(popularUrl.toString());
             new UrlQueryTask().execute(popularUrl);
         }
         else if(sortKey == 2) {
-            mUrlDisplayTextView.setText(topRatedUrl.toString());
+            //mUrlDisplayTextView.setText(topRatedUrl.toString());
             new UrlQueryTask().execute(topRatedUrl);
         }
 
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     String releaseDate = android.text.TextUtils.join(", ", releaseDateList);
 
                     String text = voteCounts;
-                    mTopResult.setText(title+"\n\n"+voteAverage+"\n\n"+popularity);
+                    //mTopResult.setText(title+"\n\n"+voteAverage+"\n\n"+popularity);
 
                     //mTopResult.setText(voteCounts+"\n\n"+id+"\n\n"+video+"\n\n"+voteAverage+"\n\n"+title+"\n\n"+popularity+"\n\n"+posterPath+"\n\n"+originalLanguage+"\n\n"+originalTitle+"\n\n"+genreIds+"\n\n"+backdropPath+"\n\n"+adult+"\n\n"+overview+"\n\n"+releaseDate);
 
@@ -219,23 +219,5 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     //Example API Request
     //https://api.themoviedb.org/3/movie/550?api_key=ca1eda3d7d2727738ebbeffcde814ed8
-
-    /*public static int getSmallArtResourceIdForWeatherCondition(int weatherId) {
-
-        Uri builtUri = Uri.parse(MOVIE_DB_URL).buildUpon()
-                .appendPath(POPULAR_PATH)
-                .appendQueryParameter(PARAM_API_KEY, apiKey)
-                .build();
-
-        URL url = null;
-        try {
-            url = new URL(builtUri.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        return NetworkUtils.;
-    }*/
-
 
 }

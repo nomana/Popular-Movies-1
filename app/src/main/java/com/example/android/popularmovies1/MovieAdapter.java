@@ -6,16 +6,22 @@ package com.example.android.popularmovies1;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 
 import com.example.android.popularmovies1.utilities.NetworkUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,17 +63,19 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
 
+        Context context = holder.posterView.getContext();
+
         //mCursor.moveToPosition(position);
 
-        List<String> posterPathList = new ArrayList<>();
-        posterPathList.add("/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg");
-        URL imageURL = NetworkUtils.buildImageUrl(posterPathList.get(0));
+        URL imageURL = NetworkUtils.buildImageUrl(mPoster.get(position));
 
-        //holder.posterView.setImageResource(position);
+        Picasso.with(context)
+                .load(imageURL.toString())
+                .into(holder.posterView);
 
-        holder.ratingView.setText(mRating.get(position));
+        holder.ratingView.setText("Rating: "+mRating.get(position));
 
-        holder.popularityView.setText(mPopularity.get(position));
+        holder.popularityView.setText("Popularity: "+mPopularity.get(position));
 
         //holder.bind(position);
     }
@@ -117,4 +125,6 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
         //mClickHandler.onClick(mCursor.getPosition());
         notifyDataSetChanged();
     }
+
+
 }

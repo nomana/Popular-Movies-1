@@ -13,7 +13,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <!--<TextView
         android:id="@+id/url_display"
         android:text="URL will show up here"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
-        android:text="Results here" />
+        android:text="Results here" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_movies"

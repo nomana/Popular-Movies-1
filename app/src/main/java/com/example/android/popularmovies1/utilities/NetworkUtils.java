@@ -60,9 +60,9 @@ public class NetworkUtils {
     }
 
     //Build URL for poster image
-    public static URL buildImageUrl(String imagePath) {
+    public static URL buildImageUrl(String imagePath, String width) {
         imagePath = imagePath.replace("/", "");
-        Uri builtUri = Uri.parse("https://image.tmdb.org/t/p/w780").buildUpon()
+        Uri builtUri = Uri.parse("https://image.tmdb.org/t/p/"+width).buildUpon()
                 .appendPath(imagePath)
                 .build();
 

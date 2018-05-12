@@ -10,7 +10,8 @@
     <ImageView
         android:id="@+id/movie_poster"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/rating"
@@ -19,13 +20,5 @@
         android:text="@string/rating"
         app:layout_constraintTop_toBottomOf="@+id/movie_poster"
         android:layout_marginTop="5dp"/>
-
-    <TextView
-        android:id="@+id/popularity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/popularity"
-        app:layout_constraintTop_toBottomOf="@+id/rating"
-        android:layout_marginTop="5dp" />
 
 </android.support.constraint.ConstraintLayout>

@@ -31,22 +31,22 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     //private final Context mContext;
 
-    private Cursor mCursor;
+    //private Cursor mCursor;
 
-    //final private MovieAdapterOnClickHandler mClickHandler;
+    final private MovieAdapterOnClickHandler mClickHandler;
+    private int mPosition;
 
     private List<String> mPoster;
     private List<String> mRating;
-    private List<String> mPopularity;
 
     public interface MovieAdapterOnClickHandler {
-        void onClick(long orderNumber);
+        void onClick(int position);
     }
 
-    /*public MovieAdapter(@NonNull Context context, MovieAdapterOnClickHandler clickHandler) {
-        mContext = context;
+    public MovieAdapter(int position, MovieAdapterOnClickHandler clickHandler) {
+        mPosition = position;
         mClickHandler = clickHandler;
-    }*/
+    }
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -67,15 +67,13 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
         //mCursor.moveToPosition(position);
 
-        URL imageURL = NetworkUtils.buildImageUrl(mPoster.get(position));
+        URL imageURL = NetworkUtils.buildImageUrl(mPoster.get(position),"w780");
 
         Picasso.with(context)
                 .load(imageURL.toString())
                 .into(holder.posterView);
 
         holder.ratingView.setText("Rating: "+mRating.get(position));
-
-        holder.popularityView.setText("Popularity: "+mPopularity.get(position));
 
         //holder.bind(position);
     }
@@ -93,20 +91,24 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     }
 
 
-    class MovieViewHolder extends RecyclerView.ViewHolder {
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final ImageView posterView;
         final TextView ratingView;
-        final TextView popularityView;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
 
             posterView = (ImageView) itemView.findViewById(R.id.movie_poster);
             ratingView = (TextView) itemView.findViewById(R.id.rating);
-            popularityView = (TextView) itemView.findViewById(R.id.popularity);
 
-            //itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition = getAdapterPosition();
+            mClickHandler.onClick(clickedPosition);
         }
 
         /*void bind(int listIndex) {
@@ -119,7 +121,6 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     public void setData(List<String> posterPath, List<String> voteAverageList, List<String> popularityList) {
         mPoster = posterPath;
         mRating = voteAverageList;
-        mPopularity = popularityList;
         //int adapterPosition = getAdapterPosition();
         //mCursor.moveToPosition(adapterPosition);
         //mClickHandler.onClick(mCursor.getPosition());

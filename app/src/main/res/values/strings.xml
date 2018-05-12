@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">Popular Movies 1</string>
+    <string name="app_name">Movies</string>
 
     <string name="main_error_message">No data available</string>
 
     <string name="rating">Rating</string>
+
     <string name="popularity">Popularity</string>
 
 </resources>

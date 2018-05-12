@@ -1,5 +1,6 @@
 package com.example.android.popularmovies1;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -38,13 +39,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private String jsonFromUrl;
 
+    private List<String> mVoteAverage = new ArrayList<>();
+    private List<String> mTitle = new ArrayList<>();
+    private List<String> mPoster = new ArrayList<>();
+    private List<String> mBackdropPath = new ArrayList<>();
+    private List<String> mOverview = new ArrayList<>();
+    private List<String> mReleaseDate = new ArrayList<>();
+
     private MovieAdapter mMovieAdapter;
     private RecyclerView mRecyclerView;
 
     final static int SORT_POPULARITY_KEY = 1;
     final static int SORT_RATING_KEY = 2;
 
+    private static final int NUMBER_OF_ITEMS = 100;
+
     final static String API_KEY = "ca1eda3d7d2727738ebbeffcde814ed8";
+
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +73,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mMovieAdapter = new MovieAdapter();
+        mMovieAdapter = new MovieAdapter(NUMBER_OF_ITEMS,this);
 
         mRecyclerView.setAdapter(mMovieAdapter);
 
         makeUrlQuery(SORT_POPULARITY_KEY);
+
+
     }
 
     private void makeUrlQuery(int sortKey) {
@@ -84,17 +98,31 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private void closeOnError() {
         finish();
-        Toast.makeText(this, R.string.main_error_message, Toast.LENGTH_SHORT).show();
+        mToast.makeText(this, R.string.main_error_message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onClick(long orderNumber) {
-        /*
+    public void onClick(int position) {
+
+        if(mToast!=null) {
+            mToast.cancel();
+        }
+        String message = "Movie "+(position+1)+" selected";
+        mToast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
         Intent movieDetailIntent = new Intent(MainActivity.this, DetailActivity.class);
-        Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(date);
+        movieDetailIntent.putExtra("EXTRA_RATING", mVoteAverage.get(position));
+        movieDetailIntent.putExtra("EXTRA_TITLE", mTitle.get(position));
+        movieDetailIntent.putExtra("EXTRA_POSTER", mPoster.get(position));
+        movieDetailIntent.putExtra("EXTRA_BACKDROP", mBackdropPath.get(position));
+        movieDetailIntent.putExtra("EXTRA_OVERVIEW", mOverview.get(position));
+        movieDetailIntent.putExtra("EXTRA_RELEASE_DATE", mReleaseDate.get(position));
+        startActivity(movieDetailIntent);
+
+        /*Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(date);
         weatherDetailIntent.setData(uriForDateClicked);
-        startActivity(weatherDetailIntent);
-        */
+        startActivity(movieDetailIntent);*/
+
     }
 
     public class UrlQueryTask extends AsyncTask<URL, Void, String> {
@@ -177,7 +205,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     //mTopResult.setText(title+"\n\n"+voteAverage+"\n\n"+popularity);
 
                     //mTopResult.setText(voteCounts+"\n\n"+id+"\n\n"+video+"\n\n"+voteAverage+"\n\n"+title+"\n\n"+popularity+"\n\n"+posterPath+"\n\n"+originalLanguage+"\n\n"+originalTitle+"\n\n"+genreIds+"\n\n"+backdropPath+"\n\n"+adult+"\n\n"+overview+"\n\n"+releaseDate);
-
+                    mVoteAverage = voteAverageList;
+                    mTitle = titleList;
+                    mPoster = posterPathList;
+                    mBackdropPath = backdropPathList;
+                    mOverview = overviewList;
+                    mReleaseDate = releaseDateList;
                     mMovieAdapter.setData(posterPathList, voteAverageList, popularityList);
 
                 } catch (JSONException e) {

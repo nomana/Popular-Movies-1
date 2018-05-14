@@ -73,7 +73,7 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
                 .load(imageURL.toString())
                 .into(holder.posterView);
 
-        holder.ratingView.setText("Rating: "+mRating.get(position));
+        holder.ratingView.setText(mRating.get(position));
 
         //holder.bind(position);
     }

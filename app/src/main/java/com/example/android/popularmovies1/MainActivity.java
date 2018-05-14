@@ -2,16 +2,22 @@ package com.example.android.popularmovies1;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private String jsonFromUrl;
 
+    private List<String> mVoteCounts = new ArrayList<>();
     private List<String> mVoteAverage = new ArrayList<>();
     private List<String> mTitle = new ArrayList<>();
     private List<String> mPoster = new ArrayList<>();
@@ -58,15 +65,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private Toast mToast;
 
+    final static int SORT_POPULARITY_INDEX = 0;
+    final static int SORT_RATING_INDEX = 1;
+
+    //ImageView mStar = (ImageView)findViewById(R.id.star);
+    //mStar.setImageResource();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //mSearchTextView = (TextView) findViewById(R.id.search_action);
-        //mUrlDisplayTextView = (TextView) findViewById(R.id.url_display);
-        //mUrlResultsTextView = (TextView) findViewById(R.id.url_results);
-        //mTopResult = (TextView) findViewById(R.id.first);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
 
@@ -104,13 +112,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onClick(int position) {
 
-        if(mToast!=null) {
+        /*if(mToast!=null) {
             mToast.cancel();
         }
         String message = "Movie "+(position+1)+" selected";
-        mToast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        mToast.makeText(this, message, Toast.LENGTH_SHORT).show();*/
 
         Intent movieDetailIntent = new Intent(MainActivity.this, DetailActivity.class);
+        movieDetailIntent.putExtra("EXTRA_RATING_COUNT", mVoteCounts.get(position));
         movieDetailIntent.putExtra("EXTRA_RATING", mVoteAverage.get(position));
         movieDetailIntent.putExtra("EXTRA_TITLE", mTitle.get(position));
         movieDetailIntent.putExtra("EXTRA_POSTER", mPoster.get(position));
@@ -205,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     //mTopResult.setText(title+"\n\n"+voteAverage+"\n\n"+popularity);
 
                     //mTopResult.setText(voteCounts+"\n\n"+id+"\n\n"+video+"\n\n"+voteAverage+"\n\n"+title+"\n\n"+popularity+"\n\n"+posterPath+"\n\n"+originalLanguage+"\n\n"+originalTitle+"\n\n"+genreIds+"\n\n"+backdropPath+"\n\n"+adult+"\n\n"+overview+"\n\n"+releaseDate);
+                    mVoteCounts = voteCountsList;
                     mVoteAverage = voteAverageList;
                     mTitle = titleList;
                     mPoster = posterPathList;
@@ -221,11 +231,31 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
     }
 
+
+    private Menu menu1 = null;
+
     //Create menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        //TextView view = (TextView) findViewById(R.id.action_sort_popularity);
+        //view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+        menu1 = menu;
+
+        //Set text color of "By Popularity" menu to colorAccent
+        MenuItem item = menu.getItem(SORT_POPULARITY_INDEX);
+        SpannableString spanString = new SpannableString(item.getTitle().toString());
+        spanString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)), 0, spanString.length(), 0); //fix the color to white
+        item.setTitle(spanString);
+
         return true;
+    }
+
+    private Menu getMenu()
+    {
+        //use it like this
+        return menu1;
     }
 
     //When menu clicked
@@ -233,10 +263,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.action_sort_popularity) {
+
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)), 0, spanString.length(), 0); //fix the color to white
+            item.setTitle(spanString);
+
+            MenuItem item2 = getMenu().getItem(SORT_RATING_INDEX);
+            SpannableString spanString2 = new SpannableString(item2.getTitle().toString());
+            spanString2.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0, spanString2.length(), 0); //fix the color to white
+            item2.setTitle(spanString2);
+
             makeUrlQuery(SORT_POPULARITY_KEY);
             return true;
         }
         else if (itemThatWasClickedId == R.id.action_sort_rating) {
+
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)), 0, spanString.length(), 0); //fix the color to white
+            item.setTitle(spanString);
+
+            MenuItem item2 = getMenu().getItem(SORT_POPULARITY_INDEX);
+            SpannableString spanString2 = new SpannableString(item2.getTitle().toString());
+            spanString2.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0, spanString2.length(), 0); //fix the color to white
+            item2.setTitle(spanString2);
+
             makeUrlQuery(SORT_RATING_KEY);
             return true;
         }

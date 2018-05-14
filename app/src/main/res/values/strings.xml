@@ -3,8 +3,18 @@
 
     <string name="main_error_message">No data available</string>
 
-    <string name="rating">Rating</string>
+    <string name="rating_label">Rating:</string>
+    <string name="rating">---</string>
 
-    <string name="popularity">Popularity</string>
+    <string name="vote_count">---</string>
+
+    <string name="release_date_label">Release Date:</string>
+    <string name="release_date">---</string>
+
+    <string name="overview_label">Plot Summary:</string>
+    <string name="overview">---</string>
+
+    <string name="menu_popularity">By Popularity</string>.
+    <string name="menu_rating">By Rating</string>
 
 </resources>

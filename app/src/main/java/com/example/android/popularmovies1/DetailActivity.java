@@ -14,6 +14,11 @@ import com.example.android.popularmovies1.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Joshua on 5/11/2018.
@@ -24,6 +29,7 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView mPoster;
     private ImageView mBackdrop;
 
+    private TextView mVoteCounts;
     private TextView mVoteAverage;
     private TextView mOverview;
     private TextView mReleaseDate;
@@ -36,6 +42,7 @@ public class DetailActivity extends AppCompatActivity {
         mPoster = (ImageView) findViewById(R.id.detail_poster);
         mBackdrop = (ImageView) findViewById(R.id.detail_backdrop);
 
+        mVoteCounts = (TextView) findViewById(R.id.detail_vote_count);
         mVoteAverage = (TextView) findViewById(R.id.detail_rating);
         mOverview = (TextView) findViewById(R.id.detail_overview);
         mReleaseDate = (TextView) findViewById(R.id.detail_release_date);
@@ -45,6 +52,7 @@ public class DetailActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         if(extras != null) {
+            String ratingCount = intentFromMainActivity.getStringExtra("EXTRA_RATING_COUNT");
             String rating = intentFromMainActivity.getStringExtra("EXTRA_RATING");
             String title = intentFromMainActivity.getStringExtra("EXTRA_TITLE");
             String posterPath = intentFromMainActivity.getStringExtra("EXTRA_POSTER");
@@ -63,10 +71,33 @@ public class DetailActivity extends AppCompatActivity {
                     .load(backdropURL.toString())
                     .into(mBackdrop);
 
-            mVoteAverage.setText(Html.fromHtml("<b>Rating:</b><br><br>"+rating+" / 10"));
-            mOverview.setText(Html.fromHtml("<b>Plot Summary:</b><br><br>"+overview));
-            mReleaseDate.setText(Html.fromHtml("<b>Release date:</b><br><br>"+releaseDate));
+            //Set Rating
+            mVoteAverage.setText(rating + " / 10");
 
+            //Set Vote Count
+            int ratingCountInt = Integer.parseInt(ratingCount);
+            ratingCount = NumberFormat.getIntegerInstance(Locale.US).format(ratingCountInt);
+            mVoteCounts.setText(ratingCount + " votes");
+
+            //Set Plot Summary
+            mOverview.setText(overview);
+
+            //Format Date
+            SimpleDateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            try {
+                date = oldDateFormat.parse(releaseDate);
+            } catch (ParseException e) {
+
+                e.printStackTrace();
+            }
+            SimpleDateFormat dateFormater = new SimpleDateFormat("MMMM dd, yyyy");
+            String outputDate = dateFormater.format(date);
+
+            //Set Release Date
+            mReleaseDate.setText(outputDate);
+
+            //Set header text to the movie title
             setTitle(title);
         }
     }

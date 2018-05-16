@@ -127,11 +127,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         movieDetailIntent.putExtra("EXTRA_OVERVIEW", mOverview.get(position));
         movieDetailIntent.putExtra("EXTRA_RELEASE_DATE", mReleaseDate.get(position));
         startActivity(movieDetailIntent);
-
-        /*Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(date);
-        weatherDetailIntent.setData(uriForDateClicked);
-        startActivity(movieDetailIntent);*/
-
+        
     }
 
     public class UrlQueryTask extends AsyncTask<URL, Void, String> {
@@ -252,9 +248,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         return true;
     }
 
-    private Menu getMenu()
-    {
-        //use it like this
+    private Menu getMenu() {
         return menu1;
     }
 
@@ -264,10 +258,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.action_sort_popularity) {
 
+            //Set text color of "By Popularity" menu to colorAccent
             SpannableString spanString = new SpannableString(item.getTitle().toString());
             spanString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)), 0, spanString.length(), 0); //fix the color to white
             item.setTitle(spanString);
 
+            //Set text color of "By Rating" menu to white
             MenuItem item2 = getMenu().getItem(SORT_RATING_INDEX);
             SpannableString spanString2 = new SpannableString(item2.getTitle().toString());
             spanString2.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0, spanString2.length(), 0); //fix the color to white
@@ -278,10 +274,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
         else if (itemThatWasClickedId == R.id.action_sort_rating) {
 
+            //Set text color of "By Rating" menu to colorAccent
             SpannableString spanString = new SpannableString(item.getTitle().toString());
             spanString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)), 0, spanString.length(), 0); //fix the color to white
             item.setTitle(spanString);
 
+            //Set text color of "By Popularity" menu to white
             MenuItem item2 = getMenu().getItem(SORT_POPULARITY_INDEX);
             SpannableString spanString2 = new SpannableString(item2.getTitle().toString());
             spanString2.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0, spanString2.length(), 0); //fix the color to white

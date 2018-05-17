@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import com.example.android.popularmovies1.utilities.NetworkUtils;
+import com.squareup.picasso.Transformation;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -61,16 +62,39 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, int position) {
+    public void onBindViewHolder(final MovieViewHolder holder, int position) {
 
         Context context = holder.posterView.getContext();
 
         //mCursor.moveToPosition(position);
 
+        /*Transformation transformation = new Transformation() {
+
+            @Override
+            public Bitmap transform(Bitmap source) {
+                int targetWidth = holder.posterView.getWidth();
+
+                double aspectRatio = (double) 780 / (double) 1170;
+                int targetHeight = (int) (targetWidth * aspectRatio);
+                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+                if (result != source) {
+                    // Same bitmap is returned if sizes are the same
+                    source.recycle();
+                }
+                return result;
+            }
+
+            @Override
+            public String key() {
+                return "transformation" + " desiredWidth";
+            }
+        };*/
+
         URL imageURL = NetworkUtils.buildImageUrl(mPoster.get(position),"w780");
 
         Picasso.with(context)
                 .load(imageURL.toString())
+                //.transform(transformation)
                 .into(holder.posterView);
 
         holder.ratingView.setText(mRating.get(position));

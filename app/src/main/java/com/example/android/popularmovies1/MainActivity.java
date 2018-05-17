@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,7 +79,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int gridSpan = 2;
+        if(width > 2000) {
+            gridSpan = 4;
+        }
+        else if(width > 1500) {
+            gridSpan = 3;
+        }
+
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, gridSpan);
         mRecyclerView.setLayoutManager(layoutManager);
 
         mMovieAdapter = new MovieAdapter(NUMBER_OF_ITEMS,this);
@@ -127,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         movieDetailIntent.putExtra("EXTRA_OVERVIEW", mOverview.get(position));
         movieDetailIntent.putExtra("EXTRA_RELEASE_DATE", mReleaseDate.get(position));
         startActivity(movieDetailIntent);
-        
+
     }
 
     public class UrlQueryTask extends AsyncTask<URL, Void, String> {

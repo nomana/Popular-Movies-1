@@ -3,6 +3,7 @@ package com.example.android.popularmovies1;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.TimedText;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -56,6 +57,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private MovieAdapter mMovieAdapter;
     private RecyclerView mRecyclerView;
+
+    public static final String VOTE_COUNT_KEY = "vote_count";
+    public static final String ID_KEY = "id";
+    public static final String VIDEO_KEY = "video";
+    public static final String VOTE_AVERAGE_KEY = "vote_average";
+    public static final String TITLE_KEY = "title";
+    public static final String POPULARITY_KEY = "popularity";
+    public static final String POSTER_PATH_KEY = "poster_path";
+    public static final String ORIGINAL_LANGUAGE_KEY = "original_language";
+    public static final String ORIGINAL_TITLE_KEY = "original_title";
+    public static final String GENRE_IDS_KEY = "genre_ids";
+    public static final String BACKDROP_PATH_KEY = "backdrop_path";
+    public static final String ADULT_KEY = "adult";
+    public static final String OVERVIEW_KEY = "overview";
+    public static final String RELEASE_DATE_KEY = "release_date";
 
     final static int SORT_POPULARITY_KEY = 1;
     final static int SORT_RATING_KEY = 2;
@@ -189,22 +205,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     for(int i = 0; i<resultsLengh; i++) {
                         JSONObject focus = results.getJSONObject(i);
 
-                        voteCountsList.add(focus.getString("vote_count"));
-                        idList.add(focus.getString("id"));
-                        videoList.add(focus.getString("video"));
-                        voteAverageList.add(focus.getString("vote_average"));
-                        titleList.add(focus.getString("title"));
-                        popularityList.add(focus.getString("popularity"));
-                        posterPathList.add(focus.getString("poster_path"));
-                        originalLanguageList.add(focus.getString("original_language"));
-                        originalTitleList.add(focus.getString("original_title"));
-                        genreIdsList.add(focus.getString("genre_ids"));
-                        backdropPathList.add(focus.getString("backdrop_path"));
-                        adultList.add(focus.getString("adult"));
-                        overviewList.add(focus.getString("overview"));
-                        releaseDateList.add(focus.getString("release_date"));
+                        voteCountsList.add(focus.optString(VOTE_COUNT_KEY));
+                        idList.add(focus.optString(ID_KEY));
+                        videoList.add(focus.optString(VIDEO_KEY));
+                        voteAverageList.add(focus.optString(VOTE_AVERAGE_KEY));
+                        titleList.add(focus.optString(TITLE_KEY));
+                        popularityList.add(focus.optString(POPULARITY_KEY));
+                        posterPathList.add(focus.optString(POSTER_PATH_KEY));
+                        originalLanguageList.add(focus.optString(ORIGINAL_LANGUAGE_KEY));
+                        originalTitleList.add(focus.optString(ORIGINAL_TITLE_KEY));
+                        genreIdsList.add(focus.optString(GENRE_IDS_KEY));
+                        backdropPathList.add(focus.optString(BACKDROP_PATH_KEY));
+                        adultList.add(focus.optString(ADULT_KEY));
+                        overviewList.add(focus.optString(OVERVIEW_KEY));
+                        releaseDateList.add(focus.optString(RELEASE_DATE_KEY));
                     }
                     //first.add(results.getString(0));
+                    /*
                     String voteCounts = android.text.TextUtils.join(", ", voteCountsList);
                     String id = android.text.TextUtils.join(", ", idList);
                     String video = android.text.TextUtils.join(", ", videoList);
@@ -221,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     String releaseDate = android.text.TextUtils.join(", ", releaseDateList);
 
                     String text = voteCounts;
+                    */
                     //mTopResult.setText(title+"\n\n"+voteAverage+"\n\n"+popularity);
 
                     //mTopResult.setText(voteCounts+"\n\n"+id+"\n\n"+video+"\n\n"+voteAverage+"\n\n"+title+"\n\n"+popularity+"\n\n"+posterPath+"\n\n"+originalLanguage+"\n\n"+originalTitle+"\n\n"+genreIds+"\n\n"+backdropPath+"\n\n"+adult+"\n\n"+overview+"\n\n"+releaseDate);

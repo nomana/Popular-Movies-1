@@ -95,6 +95,8 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
         Picasso.with(context)
                 .load(imageURL.toString())
                 //.transform(transformation)
+                .placeholder(R.drawable.placeholder_poster)
+                .error(R.drawable.no_image_poster)
                 .into(holder.posterView);
 
         holder.ratingView.setText(mRating.get(position));

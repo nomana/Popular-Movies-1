@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private static final int NUMBER_OF_ITEMS = 100;
 
-    final static String API_KEY = "ca1eda3d7d2727738ebbeffcde814ed8";
+    final static String API_KEY = "INSERT-API-KEY-HERE";
 
     //private Toast mToast;
 

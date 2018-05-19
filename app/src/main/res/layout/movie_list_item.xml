@@ -3,8 +3,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contraint_layout_list"
+    android:id="@+id/constraint_layout_list"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/poster_border">
@@ -13,7 +12,8 @@
         android:id="@+id/movie_poster"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/description_poster"/>
 
     <ImageView
         android:id="@+id/star"
@@ -21,9 +21,12 @@
         android:layout_height="wrap_content"
         android:src="@drawable/star_20"
         android:paddingTop="10dp"
+        android:paddingLeft="5dp"
         android:paddingRight="5dp"
+        android:paddingEnd="5dp"
         app:layout_constraintRight_toLeftOf="@id/rating"
-        app:layout_constraintTop_toBottomOf="@+id/movie_poster"/>
+        app:layout_constraintTop_toBottomOf="@+id/movie_poster"
+        android:contentDescription="@string/description_star"/>
 
     <TextView
         android:id="@+id/rating"

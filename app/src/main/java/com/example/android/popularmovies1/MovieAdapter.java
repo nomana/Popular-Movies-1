@@ -5,12 +5,8 @@ package com.example.android.popularmovies1;
  */
 
 import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,23 +15,15 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import com.example.android.popularmovies1.utilities.NetworkUtils;
-import com.squareup.picasso.Transformation;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 
 class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    //private final Context mContext;
-
-    //private Cursor mCursor;
-
     final private MovieAdapterOnClickHandler mClickHandler;
-    private int mPosition;
+    public final int mPosition;
 
     private List<String> mPoster;
     private List<String> mRating;
@@ -49,8 +37,9 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
         mClickHandler = clickHandler;
     }
 
+    @NonNull
     @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         int layoutId = R.layout.movie_list_item;
 
@@ -62,52 +51,24 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final MovieViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MovieViewHolder holder, int position) {
 
         Context context = holder.posterView.getContext();
-
-        //mCursor.moveToPosition(position);
-
-        /*Transformation transformation = new Transformation() {
-
-            @Override
-            public Bitmap transform(Bitmap source) {
-                int targetWidth = holder.posterView.getWidth();
-
-                double aspectRatio = (double) 780 / (double) 1170;
-                int targetHeight = (int) (targetWidth * aspectRatio);
-                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
-                if (result != source) {
-                    // Same bitmap is returned if sizes are the same
-                    source.recycle();
-                }
-                return result;
-            }
-
-            @Override
-            public String key() {
-                return "transformation" + " desiredWidth";
-            }
-        };*/
 
         URL imageURL = NetworkUtils.buildImageUrl(mPoster.get(position),"w780");
 
         Picasso.with(context)
                 .load(imageURL.toString())
-                //.transform(transformation)
                 .placeholder(R.drawable.placeholder_poster)
                 .error(R.drawable.no_image_poster)
                 .into(holder.posterView);
 
         holder.ratingView.setText(mRating.get(position));
 
-        //holder.bind(position);
     }
 
     @Override
     public int getItemCount() {
-        /*if (null == mCursor) return 0;
-        return mCursor.getCount();*/
         if(mRating==null) {
             return 0;
         }
@@ -125,8 +86,8 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
         public MovieViewHolder(View itemView) {
             super(itemView);
 
-            posterView = (ImageView) itemView.findViewById(R.id.movie_poster);
-            ratingView = (TextView) itemView.findViewById(R.id.rating);
+            posterView = itemView.findViewById(R.id.movie_poster);
+            ratingView = itemView.findViewById(R.id.rating);
 
             itemView.setOnClickListener(this);
         }
@@ -137,19 +98,11 @@ class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
             mClickHandler.onClick(clickedPosition);
         }
 
-        /*void bind(int listIndex) {
-                ratingView.setText(String.valueOf(listIndex));
-            }*/
-
-
     }
 
     public void setData(List<String> posterPath, List<String> voteAverageList, List<String> popularityList) {
         mPoster = posterPath;
         mRating = voteAverageList;
-        //int adapterPosition = getAdapterPosition();
-        //mCursor.moveToPosition(adapterPosition);
-        //mClickHandler.onClick(mCursor.getPosition());
         notifyDataSetChanged();
     }
 

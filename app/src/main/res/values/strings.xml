@@ -14,7 +14,11 @@
     <string name="overview_label">Plot Summary:</string>
     <string name="overview">---</string>
 
-    <string name="menu_popularity">By Popularity</string>.
-    <string name="menu_rating">By Rating</string>
+    <string name="menu_popularity">Most Popular</string>.
+    <string name="menu_rating">Top Rated</string>
+
+    <string name="description_poster">Poster Image</string>
+    <string name="description_backdrop">Backdrop Image</string>
+    <string name="description_star">Rating Star Image</string>
 
 </resources>

@@ -96,7 +96,9 @@ public class NetworkUtils {
         }
     }
 
+    /*
     public static Bitmap bitmapFromUrl(String imageUrl) {
+
         try {
             URL url = new URL(imageUrl);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -112,4 +114,6 @@ public class NetworkUtils {
 
         }
     }
+    */
+
 }

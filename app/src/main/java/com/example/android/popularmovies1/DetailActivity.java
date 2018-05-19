@@ -1,12 +1,8 @@
 package com.example.android.popularmovies1;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,13 +35,13 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        mPoster = (ImageView) findViewById(R.id.detail_poster);
-        mBackdrop = (ImageView) findViewById(R.id.detail_backdrop);
+        mPoster = findViewById(R.id.detail_poster);
+        mBackdrop = findViewById(R.id.detail_backdrop);
 
-        mVoteCounts = (TextView) findViewById(R.id.detail_vote_count);
-        mVoteAverage = (TextView) findViewById(R.id.detail_rating);
-        mOverview = (TextView) findViewById(R.id.detail_overview);
-        mReleaseDate = (TextView) findViewById(R.id.detail_release_date);
+        mVoteCounts = findViewById(R.id.detail_vote_count);
+        mVoteAverage = findViewById(R.id.detail_rating);
+        mOverview = findViewById(R.id.detail_overview);
+        mReleaseDate = findViewById(R.id.detail_release_date);
 
         Intent intentFromMainActivity = getIntent();
 
@@ -63,12 +59,17 @@ public class DetailActivity extends AppCompatActivity {
             URL posterURL = NetworkUtils.buildImageUrl(posterPath,"w500");
             URL backdropURL = NetworkUtils.buildImageUrl(backdrop,"original");
 
+            //Set poster image
             Picasso.with(this)
                     .load(posterURL.toString())
+                    .error(R.drawable.no_image_poster)
                     .into(mPoster);
 
+            //Set backdrop image
             Picasso.with(this)
                     .load(backdropURL.toString())
+                    .placeholder(R.drawable.placeholder_backdrop)
+                    .error(R.drawable.no_image_backdrop)
                     .into(mBackdrop);
 
             //Set Rating
@@ -83,7 +84,7 @@ public class DetailActivity extends AppCompatActivity {
             mOverview.setText(overview);
 
             //Format Date
-            SimpleDateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             Date date = null;
             try {
                 date = oldDateFormat.parse(releaseDate);
@@ -91,7 +92,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 e.printStackTrace();
             }
-            SimpleDateFormat dateFormater = new SimpleDateFormat("MMMM dd, yyyy");
+            SimpleDateFormat dateFormater = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
             String outputDate = dateFormater.format(date);
 
             //Set Release Date

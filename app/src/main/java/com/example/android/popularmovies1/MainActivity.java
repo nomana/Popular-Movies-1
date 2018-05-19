@@ -1,25 +1,16 @@
 package com.example.android.popularmovies1;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.TimedText;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,22 +21,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
-
-    private TextView mSearchTextView;
-
-    private TextView mUrlDisplayTextView;
-
-    private TextView mUrlResultsTextView;
-
-    private TextView mTopResult;
-
-    private String jsonFromUrl;
 
     private List<String> mVoteCounts = new ArrayList<>();
     private List<String> mVoteAverage = new ArrayList<>();
@@ -80,20 +60,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     final static String API_KEY = "ca1eda3d7d2727738ebbeffcde814ed8";
 
-    private Toast mToast;
+    //private Toast mToast;
 
     final static int SORT_POPULARITY_INDEX = 0;
     final static int SORT_RATING_INDEX = 1;
-
-    //ImageView mStar = (ImageView)findViewById(R.id.star);
-    //mStar.setImageResource();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
+        mRecyclerView = findViewById(R.id.recyclerview_movies);
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -124,19 +101,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         URL popularUrl = NetworkUtils.buildPopularUrl(API_KEY);
         URL topRatedUrl = NetworkUtils.buildTopRatedUrl(API_KEY);
         if(sortKey == 1) {
-            //mUrlDisplayTextView.setText(popularUrl.toString());
             new UrlQueryTask().execute(popularUrl);
         }
         else if(sortKey == 2) {
-            //mUrlDisplayTextView.setText(topRatedUrl.toString());
             new UrlQueryTask().execute(topRatedUrl);
         }
 
-    }
-
-    private void closeOnError() {
-        finish();
-        mToast.makeText(this, R.string.main_error_message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -178,8 +148,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         @Override
         protected void onPostExecute(String s) {
+            String jsonFromUrl;
+
             if (s != null && !s.equals("")) {
-                //mUrlResultsTextView.setText(s);
                 jsonFromUrl = s;
                 try {
                     JSONObject json = new JSONObject(jsonFromUrl);
@@ -200,9 +171,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     List<String> overviewList = new ArrayList<>();
                     List<String> releaseDateList = new ArrayList<>();
 
-                    int resultsLengh = results.length();
+                    int resultsLength = results.length();
 
-                    for(int i = 0; i<resultsLengh; i++) {
+                    for(int i = 0; i<resultsLength; i++) {
                         JSONObject focus = results.getJSONObject(i);
 
                         voteCountsList.add(focus.optString(VOTE_COUNT_KEY));
@@ -220,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                         overviewList.add(focus.optString(OVERVIEW_KEY));
                         releaseDateList.add(focus.optString(RELEASE_DATE_KEY));
                     }
-                    //first.add(results.getString(0));
+
                     /*
                     String voteCounts = android.text.TextUtils.join(", ", voteCountsList);
                     String id = android.text.TextUtils.join(", ", idList);
@@ -236,12 +207,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     String adult = android.text.TextUtils.join(", ", adultList);
                     String overview = android.text.TextUtils.join(", ", overviewList);
                     String releaseDate = android.text.TextUtils.join(", ", releaseDateList);
-
-                    String text = voteCounts;
                     */
-                    //mTopResult.setText(title+"\n\n"+voteAverage+"\n\n"+popularity);
 
-                    //mTopResult.setText(voteCounts+"\n\n"+id+"\n\n"+video+"\n\n"+voteAverage+"\n\n"+title+"\n\n"+popularity+"\n\n"+posterPath+"\n\n"+originalLanguage+"\n\n"+originalTitle+"\n\n"+genreIds+"\n\n"+backdropPath+"\n\n"+adult+"\n\n"+overview+"\n\n"+releaseDate);
                     mVoteCounts = voteCountsList;
                     mVoteAverage = voteAverageList;
                     mTitle = titleList;
@@ -323,14 +290,5 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         return super.onOptionsItemSelected(item);
     }
-
-    //API Key (v3 auth)
-    //ca1eda3d7d2727738ebbeffcde814ed8
-
-    //API Read Access Token (v4 auth)
-    //eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjYTFlZGEzZDdkMjcyNzczOGViYmVmZmNkZTgxNGVkOCIsInN1YiI6IjVhZWE4MjEzYzNhMzY4MDk1MTAwMWM5YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.6fZr3LvXES3_nHYBrHb1T3m6HQqKhVPjQUz1x3-ljNM
-
-    //Example API Request
-    //https://api.themoviedb.org/3/movie/550?api_key=ca1eda3d7d2727738ebbeffcde814ed8
 
 }
